@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import sys
+sys.path.append('/usr/lib/python3/dist-packages/')
+
 import rospy
 from std_msgs.msg import String
 from sensor_msgs.msg import LaserScan
