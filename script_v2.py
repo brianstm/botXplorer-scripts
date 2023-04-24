@@ -15,6 +15,8 @@ class LidarNav(object):
         self.speed = 0.5 # m/s
         self.slowdown_distance = 0.5 # meters
         self.stop_distance = 0.1 # meters
+        self.run_duration = rospy.Duration.from_sec(5) # 5 seconds
+        self.start_time = rospy.Time.now()
 
     def scan_callback(self, msg):
         rospy.logdebug('Received laser scan data')
@@ -36,6 +38,12 @@ class LidarNav(object):
             rospy.loginfo('Moving robot at full speed')
             speed = rospy.get_param('speed', self.speed)
             self.cmd_vel_pub.publish(Twist(linear=speed)) # full speed
+
+        # Check if the run duration has been exceeded
+        elapsed_time = rospy.Time.now() - self.start_time
+        if elapsed_time >= self.run_duration:
+            rospy.loginfo('Run duration exceeded, stopping robot')
+            self.cmd_vel_pub.publish(Twist()) # stop the robot
 
     def run(self):
         while not rospy.is_shutdown():
