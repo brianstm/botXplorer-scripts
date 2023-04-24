@@ -21,18 +21,24 @@ class MagniController:
         distance_1 = min(field_1) # Find the minimum distance in field 1
         distance_2 = min(field_2) # Find the minimum distance in field 2
 
+        print('distance_1:', distance_1)
+        print('distance_2:', distance_2)
+
         if distance_1 < self.distance_field_1:
             # Stop the Magni Bot if an object is detected in field 1
+            print('Stopping...')
             self.twist.linear.x = 0.0
             self.twist.angular.z = 0.0
             self.pub.publish(self.twist)
         elif distance_2 < self.distance_field_2:
             # Slow down the Magni Bot if an object is detected in field 2
+            print('Slowing down...')
             self.twist.linear.x = 0.1
             self.twist.angular.z = 0.0
             self.pub.publish(self.twist)
         else:
             # Continue moving forward if no objects are detected
+            print('Moving forward...')
             self.twist.linear.x = 0.2
             self.twist.angular.z = 0.0
             self.pub.publish(self.twist)
