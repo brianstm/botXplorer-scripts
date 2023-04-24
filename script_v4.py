@@ -8,13 +8,14 @@ from geometry_msgs.msg import Twist
 
 class MagniController:
     def __init__(self):
+        print('Starting MagniController...')
         rospy.init_node('magni_controller')
         rospy.Subscriber('/scan', LaserScan, self.laser_callback)
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.twist = Twist()
         self.twist.linear.x = 0.2 # Set the initial speed of the Magni Bot to 0.2 m/s
-        self.distance_field_1 = 0.1 # Set the minimum distance for field 1 (10 cm)
-        self.distance_field_2 = 0.5 # Set the minimum distance for field 2 (50 cm)
+        self.distance_field_1 = 0.3 # Set the minimum distance for field 1 (10 cm)
+        self.distance_field_2 = 0.7 # Set the minimum distance for field 2 (50 cm)
         self.start_time = time.time() # Store the current time
         self.run_duration = 5.0 # Set the duration to run (in seconds)
         self.run_distance = 5.0 # Set the distance to run (in meters)
