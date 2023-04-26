@@ -8,7 +8,7 @@ from geometry_msgs.msg import Twist
 class MagniController:
     def __init__(self):
         print('Starting MagniController...')
-        rospy.init_node('magni_controller')
+        rospy.init_node('magni_controller') 
         rospy.Subscriber('/scan', LaserScan, self.laser_callback)
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
         self.twist = Twist()
