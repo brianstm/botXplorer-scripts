@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from sensor_msgs.msg import LaserScan
+from sick_scan.msg import LIDoutputstateMsg
 
 def scan_callback(data):
     state = data.output_count
@@ -15,5 +15,5 @@ def scan_callback(data):
 
 if __name__ == '__main__':
     rospy.init_node('lidar_subscriber')
-    rospy.Subscriber("/sick_tim_7xx/lidoutputstate", LaserScan, scan_callback)
+    rospy.Subscriber("/sick_tim_7xx/lidoutputstate", LIDoutputstateMsg, scan_callback)
     rospy.spin()
