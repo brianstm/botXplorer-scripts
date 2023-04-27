@@ -32,8 +32,13 @@ def scan_callback(data):
         twist_msg.angular.z = 0.0
         cmd_vel_pub.publish(twist_msg)
 
-    if field2Current > field2Prev:
+    elif field2Current > field2Prev:
         twist_msg.linear.x = 0.5 
+        twist_msg.angular.z = 0.0
+        cmd_vel_pub.publish(twist_msg)
+
+    else:
+        twist_msg.linear.x = 0.7
         twist_msg.angular.z = 0.0
         cmd_vel_pub.publish(twist_msg)
 
@@ -54,4 +59,3 @@ if __name__ == '__main__':
     field2Prev = 0
 
     rospy.spin()
-
