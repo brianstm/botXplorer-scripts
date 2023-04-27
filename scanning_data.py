@@ -25,7 +25,7 @@ def callback(data):
     print("")
 
 def listener():
-    rospy.init_node('listener', anonymous=True)
+    rospy.init_node('lidar_subscriber')
     rospy.Subscriber("/scan", LaserScan, callback)
     rospy.spin()
 
