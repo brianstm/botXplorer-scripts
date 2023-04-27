@@ -1,61 +1,54 @@
 #!/usr/bin/env python
 
-# header:
-#   seq: 814
-#   stamp:
-#     secs: 1682560878
-#     nsecs: 365259740
-#   frame_id: "sick_tim_7xx"
-# version_number: 0
-# system_counter: 1582256000
-# output_state: [0, 0, 0, 1]
-# output_count: [12, 774, 0, 4]
-# time_state: 0
-# year: 0
-# month: 0
-# day: 0
-# hour: 0
-# minute: 0
-# second: 0
-# microsecond: 0
-
 import rospy
-from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Int16
 
-def scan_callback(data):
-    field1Current = data.output_count[0]
-    field2Current = data.output_count[1]
+class ObstacleDetector:
+    def __init__(self):
+        self.cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        self.lidar_sub = rospy.Subscriber('/sick_tim_7xx/lidoutputstate', Int16, self.lidar_callback)
+        self.twist = Twist()
+        self.obstacle_field1 = False
+        self.obstacle_field2 = False
 
-    if field1Current > field1Prev:
-        twist_msg.linear.x = 0.0
-        twist_msg.angular.z = 0.0
-        cmd_vel_pub.publish(twist_msg)
+    def lidar_callback(self, data):
+        field1Current = data.data[0]
+        field2Current = data.data[1]
 
-    elif field2Current > field2Prev:
-        twist_msg.linear.x = 0.5 
-        twist_msg.angular.z = 0.0
-        cmd_vel_pub.publish(twist_msg)
+        if field1Current < 2:
+            self.obstacle_field1 = True
+        else:
+            self.obstacle_field1 = False
 
-    else:
-        twist_msg.linear.x = 0.7
-        twist_msg.angular.z = 0.0
-        cmd_vel_pub.publish(twist_msg)
+        if field2Current < 10:
+            self.obstacle_field2 = True
+        else:
+            self.obstacle_field2 = False
 
-    field1Prev = field1Current
-    field2Prev = field2Current
+    def drive(self):
+        # 3 meters
+        rate = rospy.Rate(10)
+        start_time = rospy.Time.now()
+        distance = 0
+        while distance < 3 and not rospy.is_shutdown():
+            if self.obstacle_field2:
+                self.twist.linear.x = 0.2
+            elif self.obstacle_field1:
+                self.twist.linear.x = 0
+                break
+            else:
+                self.twist.linear.x = 0.7
+
+            self.cmd_pub.publish(self.twist)
+            current_time = rospy.Time.now()
+            distance = self.twist.linear.x * (current_time - start_time).to_sec()
+            rate.sleep()
+
+        self.twist.linear.x = 0
+        self.cmd_pub.publish(self.twist)
 
 if __name__ == '__main__':
-    rospy.init_node('lidar_subscriber')
-    rospy.Subscriber("/sick_tim_7xx/lidoutputstate", LaserScan, scan_callback)
-
-    cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-
-    twist_msg = Twist()
-    twist_msg.linear.x = 0.0
-    twist_msg.angular.z = 0.0
-
-    field1Prev = 0
-    field2Prev = 0
-
-    rospy.spin()
+    rospy.init_node('obstacle_detector', anonymous=True)
+    obstacle_detector = ObstacleDetector()
+    obstacle_detector.drive()
