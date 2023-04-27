@@ -5,14 +5,19 @@ from sensor_msgs.msg import LaserScan
 
 def scan_callback(data):
     ranges = [round(distance, 2) for distance in data.ranges] 
-    
-    max_range = max(ranges)
-    print("Max Range: ", max_range)
 
-    if max_range <= 0.4:
-        print("SLOWING DOWN")
-    elif max_range <= 0.2:
+    slowing_down = False
+    stopping = False
+    for distance in ranges:
+        if distance <= 0.4:
+            slowing_down = True
+        if distance <= 0.2:
+            stopping = True
+
+    if stopping:
         print("STOPPING")
+    elif slowing_down:
+        print("SLOWING DOWN")
     else:
         print("RUNNING")
 
