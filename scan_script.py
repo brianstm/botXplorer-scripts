@@ -2,6 +2,7 @@
 
 import rospy
 from sensor_msgs.msg import LaserScan
+import math
 
 def scan_callback(data):
     # for i, r in enumerate(scan.ranges):
