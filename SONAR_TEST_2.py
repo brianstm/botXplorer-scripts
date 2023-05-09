@@ -10,7 +10,7 @@ def sonar_callback(data):
     else:
         twist_cmd.linear.x = 0.7
 
-rospy.init_node('sonar_controller')
+rospy.init_node('ubiquity_controller_sonars')
 rospy.Subscriber('/sonars', Range, sonar_callback)
 
 twist_cmd = Twist()

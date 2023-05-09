@@ -8,7 +8,7 @@ OBSTACLE_DIST = 0.2
 class UbiquityBot(object):
 
     def __init__(self):
-        rospy.init_node('ubiquity_bot')
+        rospy.init_node('ubquity_controller_sonars')
 
         self.sonar_sub = rospy.Subscriber('/sonars', Range, self.sonar_callback)
 
