@@ -4,14 +4,18 @@ import rospy
 from sensor_msgs.msg import Range
 from geometry_msgs.msg import Twist
 
+
 class ObstacleDetector:
     def __init__(self):
         self.cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-        self.sonar_sub = rospy.Subscriber('/sonars', Range, self.sonar_callback)
+        self.sonar_sub = rospy.Subscriber(
+            '/sonars', Range, self.sonar_callback)
         self.twist = Twist()
         self.obstacle_detected = False
 
     def sonar_callback(self, data):
+        if data.header.frame_id == 'sonar_3':
+            print(data.header.frame_id, "\t-\t", data.range)
         if data.range < 0.3:
             self.obstacle_detected = True
         else:
@@ -27,6 +31,7 @@ class ObstacleDetector:
 
             self.cmd_pub.publish(self.twist)
             rate.sleep()
+
 
 if __name__ == '__main__':
     rospy.init_node('obstacle_detector', anonymous=True)
