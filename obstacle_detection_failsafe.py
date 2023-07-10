@@ -16,7 +16,7 @@ class ObstacleDetector:
     def lidar_callback(self, data):
         lidar_output_state = data.output_state
         print("0:",data.output_state[0])
-        print("1:",data.output_state[1])n
+        print("1:",data.output_state[1])
         print("2:",data.output_state[2])
         print("3:",data.output_state[3])
 

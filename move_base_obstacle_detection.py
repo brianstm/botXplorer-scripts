@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from sensor_msgs.msg import LaserScan
+from sensor_msgs.msg import LaserScans
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseWithCovarianceStamped
 import subprocess
