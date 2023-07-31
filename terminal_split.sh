@@ -5,32 +5,19 @@ run_bx_command() {
     gnome-terminal -- /bin/bash -c "bx; exec bash"
 }
 
-# Function to arrange terminal windows on the screen
-arrange_terminals() {
-    sleep 1 # Give some time for terminal windows to open
-    wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
-    wmctrl -r :ACTIVE: -e 0,0,0,$((SCREEN_WIDTH/2)),$((SCREEN_HEIGHT/2))
-    wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-    wmctrl -r :ACTIVE: -b remove,maximized_vert
-    wmctrl -r :ACTIVE: -e 0,$((SCREEN_WIDTH/2)),0,$((SCREEN_WIDTH/2)),$((SCREEN_HEIGHT/2))
-    wmctrl -r :ACTIVE: -b add,maximized_vert
-    wmctrl -r :ACTIVE: -b remove,maximized_horz
-    wmctrl -r :ACTIVE: -e 0,0,$((SCREEN_HEIGHT/2)),$((SCREEN_WIDTH/2)),$((SCREEN_HEIGHT/2))
-    wmctrl -r :ACTIVE: -b add,maximized_horz
-}
-
 # Get the screen width and height
 SCREEN_WIDTH=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f1)
 SCREEN_HEIGHT=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f2)
 
-# Launch four terminal windows
-gnome-terminal &
-gnome-terminal &
-gnome-terminal &
-gnome-terminal &
+# Calculate the dimensions for each terminal window
+TERMINAL_WIDTH=$((SCREEN_WIDTH / 2))
+TERMINAL_HEIGHT=$((SCREEN_HEIGHT / 2))
+
+# Launch four terminal windows with custom geometry
+gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+0+0 &
+gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+${TERMINAL_WIDTH}+0 &
+gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+0+${TERMINAL_HEIGHT} &
+gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+${TERMINAL_WIDTH}+${TERMINAL_HEIGHT} &
 
 # Run bx command in the first terminal
 run_bx_command
-
-# Arrange terminal windows on the screen
-arrange_terminals
