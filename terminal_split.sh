@@ -1,33 +1,29 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-# Function to run a command in a terminal
-function run_command_in_terminal() {
-    local command=$1
-    local title=$2
-    gnome-terminal --title="$title" -- bash -c "$command; exec bash"
+# Function to run bx command inside the first terminal
+run_bx_command() {
+    tmux send-keys -t bx-terminal "bx" Enter
 }
 
-# Function to split the screen into 4 equal parts and run commands in each terminal
-function split_screen_and_run_commands() {
-    local command1="bx" # Command to run in the top-left terminal
-    local command2=""   # Command to run in the top-right terminal
-    local command3=""   # Command to run in the bottom-left terminal
-    local command4=""   # Command to run in the bottom-right terminal
+# Create a new tmux session
+tmux new-session -d -s bx-session
 
-    # Calculate the screen dimensions
-    local screen_width=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1)
-    local screen_height=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)
+# Split the window into four equal parts (top-left, top-right, bottom-left, bottom-right)
+tmux split-window -v -t bx-session
+tmux split-window -h -t bx-session:0.0
+tmux split-window -h -t bx-session:0.2
 
-    # Calculate the dimensions for each terminal
-    local terminal_width=$((screen_width / 2))
-    local terminal_height=$((screen_height / 2))
+# Focus on the top-left pane
+tmux select-pane -t bx-session:0.0
 
-    # Run the commands in separate terminals
-    run_command_in_terminal "$command1" "Top-Left Terminal" &
-    run_command_in_terminal "$command2" "Top-Right Terminal" &
-    run_command_in_terminal "$command3" "Bottom-Left Terminal" &
-    run_command_in_terminal "$command4" "Bottom-Right Terminal" &
-}
+# Launch terminal on each pane
+tmux send-keys -t bx-session:0.0 "gnome-terminal -- /bin/bash" Enter
+tmux send-keys -t bx-session:0.1 "gnome-terminal -- /bin/bash" Enter
+tmux send-keys -t bx-session:0.2 "gnome-terminal -- /bin/bash" Enter
+tmux send-keys -t bx-session:0.3 "gnome-terminal -- /bin/bash" Enter
 
-# Call the function to split the screen and run commands
-split_screen_and_run_commands
+# Set up the command "bx" to be executed on the first terminal (top-left)
+run_bx_command
+
+# Attach to the tmux session to see the result
+tmux attach-session -t bx-session
