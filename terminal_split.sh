@@ -2,28 +2,35 @@
 
 # Function to run bx command inside the first terminal
 run_bx_command() {
-    tmux send-keys -t bx-terminal "bx" Enter
+    gnome-terminal -- /bin/bash -c "bx; exec bash"
 }
 
-# Create a new tmux session
-tmux new-session -d -s bx-session
+# Function to arrange terminal windows on the screen
+arrange_terminals() {
+    sleep 1 # Give some time for terminal windows to open
+    wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
+    wmctrl -r :ACTIVE: -e 0,0,0,$((SCREEN_WIDTH/2)),$((SCREEN_HEIGHT/2))
+    wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+    wmctrl -r :ACTIVE: -b remove,maximized_vert
+    wmctrl -r :ACTIVE: -e 0,$((SCREEN_WIDTH/2)),0,$((SCREEN_WIDTH/2)),$((SCREEN_HEIGHT/2))
+    wmctrl -r :ACTIVE: -b add,maximized_vert
+    wmctrl -r :ACTIVE: -b remove,maximized_horz
+    wmctrl -r :ACTIVE: -e 0,0,$((SCREEN_HEIGHT/2)),$((SCREEN_WIDTH/2)),$((SCREEN_HEIGHT/2))
+    wmctrl -r :ACTIVE: -b add,maximized_horz
+}
 
-# Split the window into four equal parts (top-left, top-right, bottom-left, bottom-right)
-tmux split-window -v -t bx-session
-tmux split-window -h -t bx-session:0.0
-tmux split-window -h -t bx-session:0.2
+# Get the screen width and height
+SCREEN_WIDTH=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f1)
+SCREEN_HEIGHT=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f2)
 
-# Focus on the top-left pane
-tmux select-pane -t bx-session:0.0
+# Launch four terminal windows
+gnome-terminal &
+gnome-terminal &
+gnome-terminal &
+gnome-terminal &
 
-# Launch terminal on each pane
-tmux send-keys -t bx-session:0.0 "gnome-terminal -- /bin/bash" Enter
-tmux send-keys -t bx-session:0.1 "gnome-terminal -- /bin/bash" Enter
-tmux send-keys -t bx-session:0.2 "gnome-terminal -- /bin/bash" Enter
-tmux send-keys -t bx-session:0.3 "gnome-terminal -- /bin/bash" Enter
-
-# Set up the command "bx" to be executed on the first terminal (top-left)
+# Run bx command in the first terminal
 run_bx_command
 
-# Attach to the tmux session to see the result
-tmux attach-session -t bx-session
+# Arrange terminal windows on the screen
+arrange_terminals
