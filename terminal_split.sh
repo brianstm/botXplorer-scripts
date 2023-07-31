@@ -31,3 +31,10 @@ xdotool search --classname "gnome-terminal" windowmove ${TERMINAL_WIDTH} ${TERMI
 
 # Run the bx command in the first terminal
 run_bx_command
+
+X Error of failed request:  BadWindow (invalid Window parameter)
+  Major opcode of failed request:  3 (X_GetWindowAttributes)
+  Resource id in failed request:  0x3600001
+  Serial number of failed request:  133
+  Current serial number in output stream:  134
+
