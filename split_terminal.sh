@@ -1,13 +1,22 @@
-#!/bin/bash
+#!/usr/bin/bash
 
-# Start tmux session with the name "split_terminal"
-tmux new-session -d -s split_terminal
+# Check if tmux is installed
+if ! command -v tmux &> /dev/null; then
+    echo "tmux is not installed. Please install tmux first."
+    exit 1
+fi
 
-# Split the window into 4 equal panes
-tmux split-window -v -p 50
-tmux split-window -h -p 50
+# Create a new tmux session
+tmux new-session -d -s split-screen
+
+# Split the window into four equal panes
+tmux split-window -v
+tmux split-window -h
 tmux select-pane -t 0
-tmux split-window -h -p 50
+tmux split-window -h
 
-# Attach to the tmux session
-tmux attach-session -t split_terminal
+# Attach to the new session with a split-screen layout
+tmux select-layout even-vertical
+
+# Attach to the new session (you will see the four equal panes)
+tmux attach-session -t split-screen
