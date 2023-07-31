@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Split Terminal Script
+Comment=Script to split terminal windows and run "bx"
+Exec=/home/sick/Documents/terminal.sh
+Icon=terminal
+Terminal=true
+Type=Application

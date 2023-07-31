@@ -1,33 +1,32 @@
 #!/usr/bin/bash
 
-# Function to run bx command inside the first terminal
-run_bx_command() {
-    gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+0+0 -- /bin/bash -c "bx; exec bash"
-}
-
-# Get the screen width and height
 SCREEN_WIDTH=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f1)
 SCREEN_HEIGHT=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f2)
 
-# Calculate the dimensions for each terminal window
 TERMINAL_WIDTH=$((SCREEN_WIDTH / 2))
 TERMINAL_HEIGHT=$((SCREEN_HEIGHT / 2))
 
-# Launch four terminal windows
-gnome-terminal &
-gnome-terminal &
-gnome-terminal &
-gnome-terminal &
+# ORIGINAL_TERMINAL=$(xdotool getactivewindow)
+# xdotool windowsize "$ORIGINAL_TERMINAL" ${TERMINAL_WIDTH} ${TERMINAL_HEIGHT}
+# xdotool windowmove "$ORIGINAL_TERMINAL" 0 0
 
-# Give some time for the terminals to open
-sleep 2
+window_ids=()
+for i in {1..4}; do
+  gnome-terminal &
+  sleep 0.5
+  window_id=$(xdotool search --classname "gnome-terminal" | tail -1)
+  window_ids+=("$window_id")
+done
 
-# Move and resize the terminal windows
-xdotool search --classname "gnome-terminal" windowmove 0 0
-xdotool search --classname "gnome-terminal" windowsize ${TERMINAL_WIDTH} ${TERMINAL_HEIGHT}
-xdotool getactivewindow windowmove ${TERMINAL_WIDTH} 0
-xdotool search --classname "gnome-terminal" windowmove 0 ${TERMINAL_HEIGHT}
-xdotool search --classname "gnome-terminal" windowmove ${TERMINAL_WIDTH} ${TERMINAL_HEIGHT}
+wmctrl -i -r "${window_ids[0]}" -e "0,0,0,${TERMINAL_WIDTH},${TERMINAL_HEIGHT}"
+wmctrl -i -r "${window_ids[1]}" -e "0,${TERMINAL_WIDTH},0,${TERMINAL_WIDTH},${TERMINAL_HEIGHT}"
+wmctrl -i -r "${window_ids[2]}" -e "0,0,${TERMINAL_HEIGHT},${TERMINAL_WIDTH},${TERMINAL_HEIGHT}"
+wmctrl -i -r "${window_ids[3]}" -e "0,${TERMINAL_WIDTH},${TERMINAL_HEIGHT},${TERMINAL_WIDTH},${TERMINAL_HEIGHT}"
 
-# Run the bx command in the first terminal
-run_bx_command
+xdotool windowactivate --sync "${window_ids[0]}"
+xdotool type "initiallizing the AMR Robot system"
+xdotool key Return
+xdotool type "bx"
+xdotool key Return
+
+xdotool windowactivate --sync "${window_ids[1]}"
