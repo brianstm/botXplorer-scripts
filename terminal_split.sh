@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Function to run bx command inside the first terminal
 run_bx_command() {
-    gnome-terminal -- /bin/bash -c "bx; exec bash"
+    gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+0+0 -- /bin/bash -c "bx; exec bash"
 }
 
 # Get the screen width and height
@@ -13,11 +13,21 @@ SCREEN_HEIGHT=$(xrandr | grep '*' | awk '{print $1}' | cut -d 'x' -f2)
 TERMINAL_WIDTH=$((SCREEN_WIDTH / 2))
 TERMINAL_HEIGHT=$((SCREEN_HEIGHT / 2))
 
-# Launch four terminal windows with custom geometry
-gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+0+0 &
-gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+${TERMINAL_WIDTH}+0 &
-gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+0+${TERMINAL_HEIGHT} &
-gnome-terminal --geometry=${TERMINAL_WIDTH}x${TERMINAL_HEIGHT}+${TERMINAL_WIDTH}+${TERMINAL_HEIGHT} &
+# Launch four terminal windows
+gnome-terminal &
+gnome-terminal &
+gnome-terminal &
+gnome-terminal &
 
-# Run bx command in the first terminal
+# Give some time for the terminals to open
+sleep 1
+
+# Move and resize the terminal windows
+xdotool search --classname "gnome-terminal" windowmove 0 0
+xdotool search --classname "gnome-terminal" windowsize ${TERMINAL_WIDTH} ${TERMINAL_HEIGHT}
+xdotool getactivewindow windowmove ${TERMINAL_WIDTH} 0
+xdotool search --classname "gnome-terminal" windowmove 0 ${TERMINAL_HEIGHT}
+xdotool search --classname "gnome-terminal" windowmove ${TERMINAL_WIDTH} ${TERMINAL_HEIGHT}
+
+# Run the bx command in the first terminal
 run_bx_command
