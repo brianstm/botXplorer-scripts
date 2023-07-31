@@ -1,36 +1,25 @@
 #!/usr/bin/bash
 
-# Check if tmux is installed
-if ! command -v tmux &> /dev/null; then
-    echo "tmux is not installed. Please install tmux first."
-    exit 1
-fi
+# Start tmux session with the name "split_terminal"
+tmux new-session -d -s split_terminal
 
-# Create a new tmux session
-tmux new-session -d -s split-screen
-
-# Split the window into four equal panes
-tmux split-window -v
-tmux split-window -h
+# Split the window into 4 panes
+tmux split-window -v -p 50
 tmux select-pane -t 0
-tmux split-window -h
+tmux split-window -h -p 50
+tmux select-pane -t 2
+tmux split-window -h -p 50
 
-# Attach to the new session with a split-screen layout
-tmux select-layout even-vertical
+# Move to the top-left pane and split it horizontally
+tmux select-pane -t 0
+tmux split-window -h -p 50
 
-# Attach to the new session (you will see the four equal panes)
-tmux attach-session -t split-screen
+# Rearrange the panes
+tmux select-pane -t 2
+tmux swap-pane -U
+tmux select-pane -t 0
+tmux swap-pane -L
 
-
-# sick@sick:~$ cd /home/sick/Documents/
-# sick@sick:~/Documents$ chmod +x split_terminal.sh 
-# sick@sick:~/Documents$ ls -l
-# total 4
-# -rwxrwxrwx 1 sick sick 565 Jul 31 13:46 split_terminal.sh
-# sick@sick:~/Documents$ ./split_terminal.sh 
-# bash: ./split_terminal.sh: /usr/bin/bash^M: bad interpreter: No such file or directory
-# sick@sick:~/Documents$ bash ./split_terminal.sh 
-# ./split_terminal.sh: line 2: $'\r': command not found
-# ./split_terminal.sh: line 23: syntax error: unexpected end of file
-# sick@sick:~/Documents$ 
+# Attach to the tmux session
+tmux attach-session -t split_terminal
 
