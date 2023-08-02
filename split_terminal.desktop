@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Split Terminal Script
-Comment=Script to split terminal windows and run "bx"
+Name=AMR Terminal
+Comment=Script to split 4 terminal windows and initialze the AMR
 Exec=/home/sick/Documents/terminal.sh
-Icon=terminal
+Icon=/home/sick/Documents/AMR-cover-img.png
 Terminal=true
 Type=Application
