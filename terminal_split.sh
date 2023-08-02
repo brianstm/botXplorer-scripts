@@ -2,7 +2,7 @@
 
 echo "nav - is to turn on all the navigation software (approx. wait time: 60 seconds)"
 echo "map - is to turn on all the mapping software (approx. wait time: 80 seconds)"
-echo "nil - is to only initialize the robot for change of wifi (approx. wait time: 30 seconds)"
+echo "wifi - is to only initialize the robot for change of wifi (approx. wait time: 30 seconds)"
 echo "nil - is to only initialize the robot (approx. wait time: 30 seconds)"
 echo "Please type 'nav', 'map' 'wifi' or 'nil' and press Enter:"
 read input_choice
