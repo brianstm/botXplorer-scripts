@@ -1,11 +1,10 @@
 TebLocalPlannerROS:
-
-  ## Costmap converter plugin   
+  ## Costmap converter plugin
   costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
   # "CostmapToLinesDBSRANSAC / CostmapToLinesDBSMCCH / CostmapToPolygonsDBSConcaveHull"
   costmap_converter_spin_thread: True
   costmap_converter_rate: 5
- 
+
   ## Configure plugins (namespace move_base/TebLocalPlannerROS/PLUGINNAME)
   ## The parameters must be added for each plugin separately
   costmap_converter/CostmapToLinesDBSRANSAC:
@@ -18,3 +17,15 @@ TebLocalPlannerROS:
     ransac_convert_outlier_pts: True
     ransac_filter_remaining_outlier_pts: False
     convex_hull_min_pt_separation: 0.1
+
+  costmap_converter/CostmapToPolygonsDBSMCCH:
+    min_separation_dist: 0.1
+    min_bounding_box_width: 0.4
+    max_bounding_box_width: 2.0
+    cluster_max_distance: 0.4
+    cluster_min_pts: 2
+    concave_hull_alpha: 1.0
+    max_line_length: 2.0
+    raytrace_range: 5.0
+    inflation_radius: 0.2
+    robot_radius: 0.6
