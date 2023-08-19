@@ -13,9 +13,9 @@ This repository contains the testing scripts of the botXplorer Autonomous Mobile
 This project was developed by:
 
 - Brians Tjipto Meidianto
-- Aziel Chen
-- Sameer Ahamed
-
+- Aziel Chen Qing Feng
+- Sameer Ahamed Sadiq Batcha
+  
 ## License
 
 This project is licensed under the [Apache License, Version 2.0](LICENSE).
