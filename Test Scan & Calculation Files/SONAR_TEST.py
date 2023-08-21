@@ -3,7 +3,9 @@ import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Range
 
+
 OBSTACLE_DIST = 0.2
+
 
 class UbiquityBot(object):
 
@@ -19,16 +21,20 @@ class UbiquityBot(object):
 
         self.loop()
 
+
     def sonar_callback(self, msg):
         if msg.range < OBSTACLE_DIST:
             self.twist_msg.linear.x = 0
             self.cmd_vel_pub.publish(self.twist_msg)
+
 
     def loop(self):
         rate = rospy.Rate(10) 
         while not rospy.is_shutdown():
             self.cmd_vel_pub.publish(self.twist_msg)
             rate.sleep()
+
+
 
 if __name__ == '__main__':
     try:

@@ -1,6 +1,5 @@
 #!/usr/bin/bash
 
-# Start tmux session with the name "split_terminal"
 tmux new-session -d -s split_terminal
 
 # Split the window into 4 panes

@@ -13,6 +13,7 @@ class ObstacleDetector:
         self.twist = Twist()
         self.obstacle_detected = False
 
+
     def sonar_callback(self, data):
         if data.header.frame_id == 'sonar_3':
             print(data.header.frame_id, "\t-\t", data.range)
@@ -21,16 +22,18 @@ class ObstacleDetector:
         else:
             self.obstacle_detected = False
 
+
     def drive(self):
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             if self.obstacle_detected:
                 self.twist.linear.x = 0.0
             else:
-                self.twist.linear.x = 0.7
+                self.twist.liFnear.x = 0.7
 
             self.cmd_pub.publish(self.twist)
             rate.sleep()
+
 
 
 if __name__ == '__main__':

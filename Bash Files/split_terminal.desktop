@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=AMR Terminal
 Comment=Script to split 4 terminal windows and initialze the AMR
-Exec=/home/sick/Documents/terminal.sh
-Icon=/home/sick/Documents/AMR-cover-img.png
+Exec=/home/ubuntu/Documents/split_terminal.sh
+Icon=/home/ubuntu/Documents/AMR-Icon.png
 Terminal=true
 Type=Application

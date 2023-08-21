@@ -17,7 +17,7 @@ class ObstacleAvoider:
         self.cmd_vel_sub = rospy.Subscriber(
             '/cmd_vel', Twist, self.cmd_vel_callback)
         self.process = subprocess.Popen(
-            ["roslaunch", "magni_navigation1", "move_base.launch"])
+            ["roslaunch", "navigation", "move_base.launch"])
         self.lastest_cmd_vel_point = Twist()
 
     def lidar_callback(self, data):
